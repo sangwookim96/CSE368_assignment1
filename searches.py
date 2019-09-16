@@ -3,7 +3,10 @@ Structure written by: Nils Napp
 Solution by: Jiwon Choi (F18 HW script)
 '''
 import time
-from slideproblem import * 
+from slideproblem import *
+import collections
+import heapq
+
 ## you likely need to inport some more modules to do the serach
 
 class Searches:
@@ -11,6 +14,7 @@ class Searches:
         #reset the node counter for profiling
         #the serach should return the result of 'solution(node)'
         "*** YOUR CODE HERE ***"
+
         return "Fake return value"        
 
     def recursiveDL_DFS(self, lim, problem):
@@ -27,6 +31,7 @@ class Searches:
         #reset the node counter for profiling
         #the serach should return the result of 'solution(node)'
         "*** YOUR CODE HERE ***"
+
         return "Fake return value" 
 
     # START: DEFINED ALREADY
@@ -51,15 +56,42 @@ class Searches:
                 
     def a_star_tree(self, problem: Problem) -> tuple:
         #reset the node counter for profiling
-        #the serach should return the result of 'solution(node)'
+        #the search should return the result of 'solution(node)'
         "*** YOUR CODE HERE ***"
-        return "Fake return value"
+        node = Node(problem.initialState)
+        frontier = [node]
+        heapq.heapify(frontier)
+        while frontier:
+            node = heapq.heappop(frontier)
+            if node == problem.goalState:
+                return solution(node)
+
+            for every_child in frontier:       #confused
+                every_child.f = every_child.cost + self.heuristic(child_node(node.parent, problem.actions, problem), problem.goalState)
+                frontier.append(every_child)
+
+        return None
 
     def a_star_graph(self, problem: Problem) -> tuple:
         #reset the node counter for profiling
         #the serach should return the result of 'solution(node)'
         "*** YOUR CODE HERE ***"
-        return "Fake return value"
+        node = Node(problem.initialState)
+        frontier = [node]
+        heapq.heapify(frontier)
+        explored = set()
+        while frontier:
+            node = heapq.heappop(frontier)
+            if node == problem.goalState:
+                return solution(node)
+            nodeState = tuple(node.state.toTuple())
+            explored.add(nodeState)
+            for child in frontier:        #that hasnt been explored
+                child.f = child.cost + self.heuristic(child_node(node.parent, problem.actions, problem),
+                                                                  problem.goalState) #parent, action, cost, state
+                frontier.append(child)
+
+        return None
 
     # EXTRA CREDIT (OPTIONAL)
     def solve4x4(self, p: Problem) -> tuple:
