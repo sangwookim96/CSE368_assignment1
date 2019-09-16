@@ -4,8 +4,23 @@ Solution by: Jiwon Choi (F18 HW script)
 '''
 import time
 from slideproblem import *
-import collections
+from collections import *
 import heapq
+
+
+def _expand(n: Node, p: Problem):
+    # Node n's state
+    n_state = n.state
+    # action list of n's applicable actions
+    n_applicable_actions = p.applicable(n_state)
+
+    # cnlist: child node list.
+    cnlist = []
+    for ai in n_applicable_actions:
+        child_i = child_node(n, ai, p)
+        cnlist.append(child_i)
+
+    return cnlist
 
 ## you likely need to inport some more modules to do the serach
 
@@ -58,17 +73,17 @@ class Searches:
         #reset the node counter for profiling
         #the search should return the result of 'solution(node)'
         "*** YOUR CODE HERE ***"
-        node = Node(problem.initialState)
+        node = Node(None, None, 0, problem.initialState)
         frontier = [node]
         heapq.heapify(frontier)
         while frontier:
             node = heapq.heappop(frontier)
-            if node == problem.goalState:
+            if node.state == problem.goalState:
                 return solution(node)
 
-            for every_child in frontier:       #confused
-                every_child.f = every_child.cost + self.heuristic(child_node(node.parent, problem.actions, problem), problem.goalState)
-                frontier.append(every_child)
+            for child in _expand(node, problem):
+                child.f = child.cost + self.heuristic(child.state, problem.goalState)
+                frontier.append(child)
 
         return None
 
@@ -76,19 +91,19 @@ class Searches:
         #reset the node counter for profiling
         #the serach should return the result of 'solution(node)'
         "*** YOUR CODE HERE ***"
-        node = Node(problem.initialState)
+        node = Node(None, None, 0, problem.initialState)
         frontier = [node]
         heapq.heapify(frontier)
         explored = set()
         while frontier:
             node = heapq.heappop(frontier)
-            if node == problem.goalState:
+            if node.state == problem.goalState:
                 return solution(node)
             nodeState = tuple(node.state.toTuple())
             explored.add(nodeState)
-            for child in frontier:        #that hasnt been explored
-                child.f = child.cost + self.heuristic(child_node(node.parent, problem.actions, problem),
-                                                                  problem.goalState) #parent, action, cost, state
+
+            for child in _expand(node, problem):
+                child.f = child.cost + self.heuristic(child.state, problem.goalState)
                 frontier.append(child)
 
         return None
