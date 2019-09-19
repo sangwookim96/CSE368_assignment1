@@ -59,26 +59,37 @@ class Searches:
 
     def recursiveDL_DFS(self, lim, problem):
         n = Node(None, None, 0, problem.initialState)
-        return self.depthLimitedDFS(n, lim, problem)
+        return self.depthLimitedDFS_for_id_dfs(n, lim, problem)
 
     def depthLimitedDFS(self, n, lim, problem):
         # reset the node counter for profiling
         # the serach should return the result of 'solution(node)'
         "*** YOUR CODE HERE ***"
-        node = n
-        if problem.goalTest(node.state):
-            return node
+        if problem.goalTest(n.state):
+            return solution(n)
         elif lim == 0:
-            return 'cutoff'
-        else:
-            cutoff_occured = False
-            for child in _expand(node, problem):
-                result = self.depthLimitedDFS(child, lim-1, problem)
-                if result == 'cutoff':
-                    cutoff_occured = True
-                elif result is not None:
-                    return result
-            return 'cutoff' if cutoff_occured else None
+            return None
+
+        for child in _expand(n, problem):
+            result = self.depthLimitedDFS(child, lim-1, problem)
+            if result != None:
+                return result
+        return None
+
+    def depthLimitedDFS_for_id_dfs(self, n, lim, problem):
+        # reset the node counter for profiling
+        # the serach should return the result of 'solution(node)'
+        "*** YOUR CODE HERE ***"
+        if problem.goalTest(n.state):
+            return n
+        elif lim == 0:
+            return None
+
+        for child in _expand(n, problem):
+            result = self.depthLimitedDFS_for_id_dfs(child, lim-1, problem)
+            if result != None:
+                return result
+        return None
 
     def id_dfs(self, problem):
         # reset the node counter for profiling
@@ -87,7 +98,7 @@ class Searches:
         maxDepth = 30
         for d in range(maxDepth):
             result = self.recursiveDL_DFS(d, problem)
-            if result != 'cutoff':
+            if result != None:
                 return solution(result)
 
     # START: DEFINED ALREADY
