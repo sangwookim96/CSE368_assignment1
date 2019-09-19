@@ -64,13 +64,30 @@ class Searches:
         # reset the node counter for profiling
         # the serach should return the result of 'solution(node)'
         "*** YOUR CODE HERE ***"
-        return "Fake return value"
+        node = n
+        if problem.goalTest(node.state):
+            return node
+        elif lim == 0:
+            return 'cutoff'
+        else:
+            cutoff_occured = False
+            for child in _expand(node, problem):
+                result = self.depthLimitedDFS(child, lim-1, problem)
+                if result == 'cutoff':
+                    cutoff_occured = True
+                elif result is not None:
+                    return result
+            return 'cutoff' if cutoff_occured else None
 
     def id_dfs(self, problem):
         # reset the node counter for profiling
         # the serach should return the result of 'solution(node)'
         "*** YOUR CODE HERE ***"
-        return "Fake return value"
+        maxDepth = 100
+        for d in range(maxDepth):
+            result = self.recursiveDL_DFS(d, problem)
+            if result != 'cutoff':
+                return result
 
     # START: DEFINED ALREADY
     def poseList(self, s):
