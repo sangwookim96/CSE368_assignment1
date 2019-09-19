@@ -59,9 +59,29 @@ class Searches:
 
     def recursiveDL_DFS(self, lim, problem):
         n = Node(None, None, 0, problem.initialState)
-        return self.depthLimitedDFS(n, lim, problem)
+        return self.depthLimitedDFS_for_recursiveDL_DFS(n, lim, problem)
 
     def depthLimitedDFS(self, n, lim, problem):
+        # reset the node counter for profiling
+        # the serach should return the result of 'solution(node)'
+        "*** YOUR CODE HERE ***"
+        node = n
+        if problem.goalTest(node.state):
+            return solution(node)  # change to solution
+        elif lim == 0:
+            return 'cutoff'
+        else:
+            cutoff_occured = False
+            for a in problem.applicable(node.state):
+                child = child_node(node, a, problem)
+                result = self.depthLimitedDFS(child, lim-1, problem)
+                if result == 'cutoff':
+                    cutoff_occured = True
+                elif result is not None:
+                    return result
+            return 'cutoff' if cutoff_occured else None
+
+    def depthLimitedDFS_for_recursiveDL_DFS(self, n, lim, problem):
         # reset the node counter for profiling
         # the serach should return the result of 'solution(node)'
         "*** YOUR CODE HERE ***"
@@ -72,8 +92,10 @@ class Searches:
             return 'cutoff'
         else:
             cutoff_occured = False
-            for child in _expand(node, problem):
-                result = self.depthLimitedDFS(child, lim-1, problem)
+            for a in problem.applicable(node.state):
+                child = child_node(node, a, problem)
+                result = self.depthLimitedDFS_for_recursiveDL_DFS(
+                    child, lim-1, problem)
                 if result == 'cutoff':
                     cutoff_occured = True
                 elif result is not None:
