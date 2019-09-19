@@ -52,7 +52,7 @@ class Searches:
             for child in _expand(node, problem):
                 if child.state.toTuple() not in explored and child not in frontier:
                     if problem.goalTest(child.state):
-                        return child
+                        return solution(child)
                     frontier.append(child)
 
         return "Fake return value"
@@ -88,7 +88,7 @@ class Searches:
         for d in range(maxDepth):
             result = self.recursiveDL_DFS(d, problem)
             if result != 'cutoff':
-                return result
+                return solution(result)
 
     # START: DEFINED ALREADY
     def poseList(self, s):
