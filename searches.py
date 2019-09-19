@@ -59,46 +59,35 @@ class Searches:
 
     def recursiveDL_DFS(self, lim, problem):
         n = Node(None, None, 0, problem.initialState)
-        return self.depthLimitedDFS_for_id_dfs(n, lim, problem)
+        return self.depthLimitedDFS(n, lim, problem)
 
     def depthLimitedDFS(self, n, lim, problem):
         # reset the node counter for profiling
         # the serach should return the result of 'solution(node)'
         "*** YOUR CODE HERE ***"
-        if problem.goalTest(n.state):
-            return solution(n)
+        node = n
+        if problem.goalTest(node.state):
+            return node  # change to solution
         elif lim == 0:
-            return None
-
-        for child in _expand(n, problem):
-            result = self.depthLimitedDFS(child, lim-1, problem)
-            if result != None:
-                return result
-        return None
-
-    def depthLimitedDFS_for_id_dfs(self, n, lim, problem):
-        # reset the node counter for profiling
-        # the serach should return the result of 'solution(node)'
-        "*** YOUR CODE HERE ***"
-        if problem.goalTest(n.state):
-            return n
-        elif lim == 0:
-            return None
-
-        for child in _expand(n, problem):
-            result = self.depthLimitedDFS_for_id_dfs(child, lim-1, problem)
-            if result != None:
-                return result
-        return None
+            return 'cutoff'
+        else:
+            cutoff_occured = False
+            for child in _expand(node, problem):
+                result = self.depthLimitedDFS(child, lim-1, problem)
+                if result == 'cutoff':
+                    cutoff_occured = True
+                elif result is not None:
+                    return result
+            return 'cutoff' if cutoff_occured else None
 
     def id_dfs(self, problem):
         # reset the node counter for profiling
         # the serach should return the result of 'solution(node)'
         "*** YOUR CODE HERE ***"
-        maxDepth = 30
+        maxDepth = 30  # how do you know
         for d in range(maxDepth):
             result = self.recursiveDL_DFS(d, problem)
-            if result != None:
+            if result != 'cutoff':
                 return solution(result)
 
     # START: DEFINED ALREADY
@@ -125,7 +114,7 @@ class Searches:
         # reset the node counter for profiling
         # the serach should return the result of 'solution(node)'
         "*** YOUR CODE HERE ***"
-        node = Node(None, None, 0, problem.initialState)
+        '''node = Node(None, None, 0, problem.initialState)
         frontier = [node]
         heapq.heapify(frontier)
         while frontier:
@@ -138,13 +127,14 @@ class Searches:
                     self.heuristic(child.state, problem.goalState)
                 frontier.append(child)
 
-        return None
+        return None'''
+        return 'fake value'
 
     def a_star_graph(self, problem: Problem) -> tuple:
         # reset the node counter for profiling
         # the serach should return the result of 'solution(node)'
         "*** YOUR CODE HERE ***"
-        node = Node(None, None, 0, problem.initialState)
+        '''node = Node(None, None, 0, problem.initialState)
         frontier = [node]
         heapq.heapify(frontier)
         explored = set()
@@ -160,7 +150,8 @@ class Searches:
                     self.heuristic(child.state, problem.goalState)
                 frontier.append(child)
 
-        return None
+        return None'''
+        return 'fake value'
 
     # EXTRA CREDIT (OPTIONAL)
     def solve4x4(self, p: Problem) -> tuple:
