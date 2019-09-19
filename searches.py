@@ -84,7 +84,7 @@ class Searches:
         # reset the node counter for profiling
         # the serach should return the result of 'solution(node)'
         "*** YOUR CODE HERE ***"
-        maxDepth = 100
+        maxDepth = 30
         for d in range(maxDepth):
             result = self.recursiveDL_DFS(d, problem)
             if result != 'cutoff':
@@ -123,7 +123,8 @@ class Searches:
                 return solution(node)
 
             for child in _expand(node, problem):
-                child.f = child.cost + self.heuristic(child.state, problem.goalState)
+                child.f = child.cost + \
+                    self.heuristic(child.state, problem.goalState)
                 frontier.append(child)
 
         return None
@@ -144,7 +145,8 @@ class Searches:
             explored.add(nodeState)
 
             for child in _expand(node, problem):
-                child.f = child.cost + self.heuristic(child.state, problem.goalState)
+                child.f = child.cost + \
+                    self.heuristic(child.state, problem.goalState)
                 frontier.append(child)
 
         return None
