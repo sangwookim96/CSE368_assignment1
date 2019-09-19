@@ -4,9 +4,10 @@ Solution by: Jiwon Choi (F18 HW script)
 '''
 import time
 from slideproblem import *
+from collections import *
+import heapq
 # you likely need to inport some more modules to do the serach
 # for deque
-from collections import *
 
 """returns a list of nodes that are children of the node n.
 n: Node, p: Problem"""
@@ -113,13 +114,40 @@ class Searches:
         # reset the node counter for profiling
         # the serach should return the result of 'solution(node)'
         "*** YOUR CODE HERE ***"
-        return "Fake return value"
+        node = Node(None, None, 0, problem.initialState)
+        frontier = [node]
+        heapq.heapify(frontier)
+        while frontier:
+            node = heapq.heappop(frontier)
+            if node.state == problem.goalState:
+                return solution(node)
+
+            for child in _expand(node, problem):
+                child.f = child.cost + self.heuristic(child.state, problem.goalState)
+                frontier.append(child)
+
+        return None
 
     def a_star_graph(self, problem: Problem) -> tuple:
         # reset the node counter for profiling
         # the serach should return the result of 'solution(node)'
         "*** YOUR CODE HERE ***"
-        return "Fake return value"
+        node = Node(None, None, 0, problem.initialState)
+        frontier = [node]
+        heapq.heapify(frontier)
+        explored = set()
+        while frontier:
+            node = heapq.heappop(frontier)
+            if node.state == problem.goalState:
+                return solution(node)
+            nodeState = tuple(node.state.toTuple())
+            explored.add(nodeState)
+
+            for child in _expand(node, problem):
+                child.f = child.cost + self.heuristic(child.state, problem.goalState)
+                frontier.append(child)
+
+        return None
 
     # EXTRA CREDIT (OPTIONAL)
     def solve4x4(self, p: Problem) -> tuple:
