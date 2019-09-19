@@ -127,7 +127,8 @@ class Problem:
         self.initialState=0
         self.goalState=0
 
-    def apply(self,a,s):
+    # apply the action a to the state s, and return the applied state.
+    def apply(self, a, s):
 
         #positions after move, still refers to s.position object
         post=s.position
@@ -158,12 +159,13 @@ class Problem:
 
         return s
         
-    def applicable(self,s):
-        actionList=[]
+    # return list of applicable actions (U,L,D,R) at the state s
+    def applicable(self, s):
+        actionList = []
 
-        #check if actions are applicable
-        #Not in top row
-        if s.position[0]>0:
+        # check if actions are applicable
+        # Not in top row
+        if s.position[0] > 0:
             actionList.append('U')
 
         #not in left most col
@@ -180,16 +182,19 @@ class Problem:
 
         return actionList
 
-    def goalTest(self,s):
-        return self.goalState==s    
+    # return true if the state s is the goal state.
+    def goalTest(self, s):
+        return self.goalState == s
 
 
-        
-def child_node(n , action, problem):
-    return Node(n,action, n.cost + 1, problem.apply(action,State(n.state))) #parent, action, cost, state
+# return the current node n's child node that is the state after the action.
+def child_node(n, action, problem):
+    return Node(n, action, n.cost + 1, problem.apply(action, State(n.state)))
 
-        
-def apply_rnd_moves(numMoves,s,p):
+
+# do some random moves (numMoves) from the state s.
+# p: Problem()
+def apply_rnd_moves(numMoves, s, p):
     for i in range(numMoves):
         p.apply(p.actions[random.randint(0,3)],s)
     
