@@ -55,8 +55,6 @@ class Searches:
                         return solution(child)
                     frontier.append(child)
 
-        return "Fake return value"
-
     def recursiveDL_DFS(self, lim, problem):
         n = Node(None, None, 0, problem.initialState)
         return self.depthLimitedDFS_for_recursiveDL_DFS(n, lim, problem)
@@ -65,55 +63,52 @@ class Searches:
         # reset the node counter for profiling
         # the serach should return the result of 'solution(node)'
         "*** YOUR CODE HERE ***"
-        # node = n
-        # if problem.goalTest(node.state):
-        #     return solution(node)  # change to solution
-        # elif lim == 0:
-        #     return 'cutoff'
-        # else:
-        #     cutoff_occured = False
-        #     for a in problem.applicable(node.state):
-        #         child = child_node(node, a, problem)
-        #         result = self.depthLimitedDFS(child, lim-1, problem)
-        #         if result == 'cutoff':
-        #             cutoff_occured = True
-        #         elif result is not None:
-        #             return result
-        #     return 'cutoff' if cutoff_occured else None
-        return 'fake value'
+        node = n
+        if problem.goalTest(node.state):
+            return solution(node)  # change to solution
+        elif lim == 0:
+            return 'cutoff'
+        else:
+            cutoff_occured = False
+            for a in problem.applicable(node.state):
+                child = child_node(node, a, problem)
+                result = self.depthLimitedDFS(child, lim-1, problem)
+                if result == 'cutoff':
+                    cutoff_occured = True
+                elif result is not None:
+                    return result
+            return 'cutoff' if cutoff_occured else None
 
     def depthLimitedDFS_for_recursiveDL_DFS(self, n, lim, problem):
         # reset the node counter for profiling
         # the serach should return the result of 'solution(node)'
         "*** YOUR CODE HERE ***"
-        # node = n
-        # if problem.goalTest(node.state):
-        #     return node  # change to solution
-        # elif lim == 0:
-        #     return 'cutoff'
-        # else:
-        #     cutoff_occured = False
-        #     for a in problem.applicable(node.state):
-        #         child = child_node(node, a, problem)
-        #         result = self.depthLimitedDFS_for_recursiveDL_DFS(
-        #             child, lim-1, problem)
-        #         if result == 'cutoff':
-        #             cutoff_occured = True
-        #         elif result is not None:
-        #             return result
-        #     return 'cutoff' if cutoff_occured else None
-        return 'fake value'
+        node = n
+        if problem.goalTest(node.state):
+            return node  # change to solution
+        elif lim == 0:
+            return 'cutoff'
+        else:
+            cutoff_occured = False
+            for a in problem.applicable(node.state):
+                child = child_node(node, a, problem)
+                result = self.depthLimitedDFS_for_recursiveDL_DFS(
+                    child, lim-1, problem)
+                if result == 'cutoff':
+                    cutoff_occured = True
+                elif result is not None:
+                    return result
+            return 'cutoff' if cutoff_occured else None
 
     def id_dfs(self, problem):
-        # # reset the node counter for profiling
-        # # the serach should return the result of 'solution(node)'
-        # "*** YOUR CODE HERE ***"
-        # maxDepth = 30  # how do you know
-        # for d in range(maxDepth):
-        #     result = self.recursiveDL_DFS(d, problem)
-        #     if result != 'cutoff':
-        #         return solution(result)
-        return 'fake value'
+        # reset the node counter for profiling
+        # the serach should return the result of 'solution(node)'
+        "*** YOUR CODE HERE ***"
+        maxDepth = 30  # how do you know
+        for d in range(maxDepth):
+            result = self.recursiveDL_DFS(d, problem)
+            if result != 'cutoff':
+                return solution(result)
 
     # START: DEFINED ALREADY
     def poseList(self, s):
@@ -140,10 +135,10 @@ class Searches:
         # the serach should return the result of 'solution(node)'
         "*** YOUR CODE HERE ***"
         node = Node(None, None, 0, problem.initialState)
-        frontier = [node]
+        frontier = [(0, node)]
         heapq.heapify(frontier)
         while frontier:
-            node = heapq.heappop(frontier)
+            node = heapq.heappop(frontier)[1]
             if node.state == problem.goalState:
                 return solution(node)
 
@@ -151,7 +146,7 @@ class Searches:
                 child = child_node(node, a, problem)
                 child.f = child.cost + \
                     self.heuristic(child.state, problem.goalState)
-                frontier.append(child)
+                frontier.append((child.f, child))
 
         return None
         # return 'fake value'
@@ -160,24 +155,24 @@ class Searches:
         # reset the node counter for profiling
         # the serach should return the result of 'solution(node)'
         "*** YOUR CODE HERE ***"
-        '''node = Node(None, None, 0, problem.initialState)
-        frontier = [node]
+        node = Node(None, None, 0, problem.initialState)
+        frontier = [(0, node)]
         heapq.heapify(frontier)
         explored = set()
         while frontier:
-            node = heapq.heappop(frontier)
+            node = heapq.heappop(frontier)[1]
             if node.state == problem.goalState:
                 return solution(node)
-            nodeState = tuple(node.state.toTuple())
+            nodeState = node.state.toTuple()
             explored.add(nodeState)
 
-            for child in _expand(node, problem):
+            for a in problem.applicable(node.state):
+                child = child_node(node, a, problem)
                 child.f = child.cost + \
                     self.heuristic(child.state, problem.goalState)
-                frontier.append(child)
+                frontier.append((child.f, child))
 
-        return None'''
-        return 'fake value'
+        return None
 
     # EXTRA CREDIT (OPTIONAL)
     def solve4x4(self, p: Problem) -> tuple:
