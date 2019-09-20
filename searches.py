@@ -138,7 +138,8 @@ class Searches:
         frontier = [(0, node)]
         heapq.heapify(frontier)
         while frontier:
-            node = heapq.heappop(frontier)[1]
+            head = heapq.heappop(frontier)
+            node = head[1]
             if node.state == problem.goalState:
                 return solution(node)
 
@@ -146,9 +147,10 @@ class Searches:
                 child = child_node(node, a, problem)
                 child.f = child.cost + \
                     self.heuristic(child.state, problem.goalState)
-                frontier.append((child.f, child))
+                # frontier.append((child.f, child))
+                heapq.heappush(frontier, (child.f, child))
 
-        return None
+        # return None
         # return 'fake value'
 
     def a_star_graph(self, problem: Problem) -> tuple:
@@ -160,7 +162,8 @@ class Searches:
         heapq.heapify(frontier)
         explored = set()
         while frontier:
-            node = heapq.heappop(frontier)[1]
+            head = heapq.heappop(frontier)
+            node = head[1]
             if node.state == problem.goalState:
                 return solution(node)
             nodeState = node.state.toTuple()
@@ -168,11 +171,13 @@ class Searches:
 
             for a in problem.applicable(node.state):
                 child = child_node(node, a, problem)
-                child.f = child.cost + \
-                    self.heuristic(child.state, problem.goalState)
-                frontier.append((child.f, child))
+                if child.state.toTuple() not in explored:
+                    child.f = child.cost + \
+                        self.heuristic(child.state, problem.goalState)
+                    # frontier.append((child.f, child))
+                    heapq.heappush(frontier, (child.f, child))
 
-        return None
+        # return None
 
     # EXTRA CREDIT (OPTIONAL)
     def solve4x4(self, p: Problem) -> tuple:
